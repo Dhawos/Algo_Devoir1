@@ -3,14 +3,15 @@
 
 #include "stdafx.h"
 #include "Card.h"
+#include "Heap.h"
 #include <iostream>
 #include <ctime>
 
 int main()
 {
-	srand(unsigned(time(NULL)));
-	Card card = Card();
-	std::cout << "Value : " << card.getValue() << " Bonus : " << card.getBonus() << " Color : " << card.getColor() << " Playing Value : " << card.getPlayingValue() << std::endl;
+	srand(unsigned(time(NULL))); //Needed in order for cards to be random
+	Heap<Card> deck = Heap<Card>();
+	std::cout << deck << std::endl;
 	system("pause");
 	return 0;
 }

@@ -6,8 +6,8 @@ using std::string;
 //Constructors
 Card::Card()
 {
-
 }
+
 
 //Destructor
 Card::~Card()
@@ -39,5 +39,10 @@ float Card::getPlayingValue() const {
 		playingValue *= 1.5;
 	}
 	return playingValue;
+}
+
+std::ostream& operator<< (std::ostream& stream, const Card card) {
+	stream << "Value : " << card.getValue() << " Bonus : " << card.getBonus() << " Color : " << card.getColor() << " Playing Value : " << card.getPlayingValue() << std::endl;
+	return stream;
 }
 

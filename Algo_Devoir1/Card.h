@@ -14,9 +14,10 @@ public:
 	string getColor() const;
 	short getBonus() const;
 	float getPlayingValue() const;
+	friend std::ostream& operator<< (std::ostream&, const Card);
 private:
-	const short value = rand() % 10 + 1; //The number of the card (between 1 and 10)
-	const enum Color color = Card::Color(rand() % 2); //0 for Black, 1 for Red
-	const short bonus = rand() % 4 + 1; //The bonus of the card (between 1 and 4)
+	short value = rand() % 10 + 1; //The number of the card (between 1 and 10)
+	enum Color color = Card::Color(rand() % 2); //0 for Black, 1 for Red
+	short bonus = rand() % 4 + 1; //The bonus of the card (between 1 and 4)
 };
 
