@@ -24,10 +24,10 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Algo_Devoir1\Devoir1\Card.h">
+    <ClInclude Include="Card.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Algo_Devoir1\Devoir1\Heap.h">
+    <ClInclude Include="Heap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,7 +38,7 @@
     <ClCompile Include="Algo_Devoir1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Algo_Devoir1\Devoir1\Card.cpp">
+    <ClCompile Include="Card.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
