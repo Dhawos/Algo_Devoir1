@@ -12,8 +12,9 @@ public:
 	//Getters
 	short getValue() const;
 	string getColor() const;
+	int getColorAsInt() const;
 	short getBonus() const;
-	float getPlayingValue() const;
+	float getScore() const;
 	friend std::ostream& operator<< (std::ostream&, const Card);
 private:
 	short value = rand() % 10 + 1; //The number of the card (between 1 and 10)

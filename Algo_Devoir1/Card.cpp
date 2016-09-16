@@ -28,11 +28,15 @@ string Card::getColor() const {
 	}
 }
 
+int Card::getColorAsInt() const {
+	return this->color;
+}
+
 short Card::getBonus() const {
 	return this->bonus;
 }
 
-float Card::getPlayingValue() const {
+float Card::getScore() const {
 	float playingValue = 1;
 	playingValue *= this->value * this->bonus;
 	if (this->color == Color::Red) {
@@ -42,7 +46,7 @@ float Card::getPlayingValue() const {
 }
 
 std::ostream& operator<< (std::ostream& stream, const Card card) {
-	stream << "Value : " << card.getValue() << " Bonus : " << card.getBonus() << " Color : " << card.getColor() << " Playing Value : " << card.getPlayingValue() << std::endl;
+	stream << "Value : " << card.getValue() << " Bonus : " << card.getBonus() << " Color : " << card.getColor() << " Playing Value : " << card.getScore() << std::endl;
 	return stream;
 }
 
