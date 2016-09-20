@@ -52,8 +52,8 @@ int main()
 	
 	//start machine processes
 	MT.run();
-	MJ.run();
-	MA.run();
+	//MJ.run();
+	//MA.run();
 
 	//Sort pieces arriving from the dock
 	while (true) {

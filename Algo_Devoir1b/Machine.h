@@ -44,6 +44,7 @@ template<typename T>
 void Machine<T>::run()
 {
 	std::thread t(&Machine<T>::process, this);
+	t.detach();
 }
 
 template<>
