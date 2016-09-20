@@ -83,7 +83,11 @@ int main()
 			}
 			free(part);
 		}
-	};
+	}
+	MT.stop();
+	MJ.stop();
+	MA.stop();
+	MP.stop();
 	auto end = std::chrono::system_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start);
 	std::cout << "Il a fallu " << elapsed.count() << " secondes pour obtenir les " << NB_PISTONS_TO_BUILD << " pistons" << std::endl;
