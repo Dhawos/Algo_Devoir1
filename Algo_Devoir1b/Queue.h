@@ -23,20 +23,21 @@ public: // constructeurs et destructeurs:
 	const T& first() const; // tête de la file
 	const T& last() const; // queue de la file
 							  // surcharges d'opérateurs
-	const Queue<T>& operator = (const Queue<T>&) throw (bad_alloc);
+	const Queue<T>& operator = (const Queue<T>&);
 	template <typename U> friend std::ostream& operator << (std::ostream& f, const Queue<U>& q);
 };
 
 template<typename T> Queue<T>::Queue()
 {
 	this->array = list<T>();
-	this->size = DEFAULT_SIZE;
+	this->max_size = DEFAULT_SIZE;
 }
 
 template<typename T>
  Queue<T>::Queue(const Queue & other)
 {
-	 this->array = other.array
+	 this->array = other.array;
+	 this->size = other.size;
 }
 
 template<typename T>
@@ -48,6 +49,9 @@ template<typename T>
 template<typename T>
  void Queue<T>::push(const T & element)
 {
+	 if (this->isFull()) {
+		 throw std::length_error("Queue is empty, cannot pop object");
+	 }
 	 this->array.push_back(element);
 }
 
@@ -93,7 +97,7 @@ template<typename T>
 }
 
 template<typename T>
- const Queue<T>& Queue<T>::operator=(const Queue<T>&) throw(bad_alloc)
+ const Queue<T>& Queue<T>::operator=(const Queue<T>&)
 {
 	 this->array = other.array;
 	 return *this;
