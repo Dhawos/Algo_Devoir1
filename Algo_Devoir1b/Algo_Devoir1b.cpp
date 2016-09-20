@@ -12,6 +12,7 @@
 #include "Piston.h"
 #include <ctime>
 #include <thread>
+#include <typeinfo>
 
 #define SPAWN_PART_TIMEOUT 1
 void spawnPart(int timeout, Part** newPart, bool* newPieceAvailable){
@@ -53,7 +54,23 @@ int main()
 	while (true) {
 		if (*newPieceAvailable) {
 			*newPieceAvailable = false;
-			std::cout << *part << std::endl;
+			Head* pHead = dynamic_cast<Head*>(part);
+			if (pHead == NULL) { //The part is not a Head
+				Skirt* pSkirt = dynamic_cast<Skirt*>(part);
+				if (pSkirt == NULL) { //The part is not a Skirt
+					Axis* pAxis = dynamic_cast<Axis*>(part);
+					if (pAxis == NULL) { throw std::bad_cast(); }
+					else { //The part is an Axis
+						MA.givePart(*pAxis);
+					}
+				}
+				else {//The part is a skirt
+					MJ.givePart(*pSkirt);
+				}
+			}
+			else { //The part is a Head
+				MT.givePart(*pHead);
+			}
 			free(part);
 		}
 	};
