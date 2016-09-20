@@ -7,8 +7,7 @@ private:
 public:
 	Head() {};
 	~Head(){};
-	void refine() {
-
-	};
+	void refine() {};
+	void print(ostream& os) const { os << "Piece(Head) - Refined : " << this->isRefined; };
 };
 

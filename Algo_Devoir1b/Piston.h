@@ -9,5 +9,6 @@ public:
 	~Piston() {};
 	void refine() {
 	};
+	void print(ostream& os) const { os << "Piece(Piston) - Refined : " << this->isRefined; };
 };
 
