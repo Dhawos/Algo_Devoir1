@@ -38,14 +38,32 @@ int main()
 	std::cout << "----------------Deck de depart----------------" << std::endl;
 	std::cout << deck << std::endl;
 	bool wantsToPlay = true;
+	Heap<Card>* gainDecks = new Heap<Card>[2];
 	while (wantsToPlay){
-		War game = War(playerHeapSize, deck, 3); //Timeout value not yet implemented
-		game.distributeCards();
-		/*Heap<Card>* gainDecks = */game.startGame();
-		std::cout << "Voulez vous rejouer ? Tapez \"oui\" pour relancer, une autre entree quitte le programme..." << std::endl;
-		std::getline(std::cin, input);
-		wantsToPlay = input == "oui" || input == "o";
+		if (gainDecks[0].size() == 0 && gainDecks[1].size() == 0) {
+			War game = War(playerHeapSize, deck,gainDecks);
+			gainDecks = game.startGame();
+		}
+		else {
+			War game = War(gainDecks);
+			gainDecks = game.startGame();
+		}
+		std::cout << std::endl;
+		std::cout << "-------------Nouveau Deck du joueur 1---------------" << std::endl;
+		std::cout << gainDecks[0] << std::endl;
+		std::cout << "-------------Nouveau Deck du joueur 2---------------" << std::endl;
+		std::cout << gainDecks[1] << std::endl;
+		if (gainDecks[0].size() == 0 || gainDecks[1].size() == 0) {
+			std::cout << "L'un des deux joueurs n'a plus de cartes, fin de la partie" << std::endl;
+			wantsToPlay = false;
+		}
+		else {
+			std::cout << "Voulez vous rejouer ? Tapez \"oui\" pour relancer, une autre entree quitte le programme..." << std::endl;
+			std::getline(std::cin, input);
+			wantsToPlay = input == "oui" || input == "o";
+		}
 	}
+	delete [] gainDecks;
 	system("pause");
 	return 0;
 }

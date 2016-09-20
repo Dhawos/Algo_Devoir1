@@ -6,7 +6,7 @@ template <typename T>
 class Heap
 {
 private: //Implmentation model
-	const static int MAX_PILE = 1000;
+	const static int MAX_PILE = 100;
 	vector<T> array;
 public:
 	//constructor and destructor

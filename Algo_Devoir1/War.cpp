@@ -1,22 +1,32 @@
 #include "stdafx.h"
 #include "War.h"
 #include <iostream>
-#include <chrono>
-#include <thread>
 
-War::War(int nbCardsPerPlayer,Heap<Card> deck,int delay)
+War::War(int nbCardsPerPlayer,Heap<Card> deck, Heap<Card> *playersGainDecks)
 {
-	this->turn = 0;
 	this->nbCardsPerPlayer = nbCardsPerPlayer;
 	this->deck = deck;
-	this->delay = delay;
-	this->finished = false;
 	this->playersDecks[0] = Heap<Card>(this->nbCardsPerPlayer);
 	this->playersDecks[1] = Heap<Card>(this->nbCardsPerPlayer);
-	this->playersGainDecks[0] = Heap<Card>(this->nbCardsPerPlayer*2);
-	this->playersGainDecks[1] = Heap<Card>(this->nbCardsPerPlayer*2);
+	this->playersGainDecks = playersGainDecks;
+	this->distributeCards();
 }
 
+War::War(Heap<Card> *playersGainDecks)
+{
+	Heap<Card> deckP1 = playersGainDecks[0];
+	Heap<Card> deckP2 = playersGainDecks[1];
+	if (deckP1.size() <= deckP2.size()) {
+		this->nbCardsPerPlayer = deckP1.size();
+	}
+	else {
+		this->nbCardsPerPlayer = deckP2.size();
+	}
+	this->playersDecks[0] = deckP1;
+	this->playersDecks[1] = deckP2;
+	delete[] this->playersGainDecks;
+	this->playersGainDecks = new Heap<Card>[2];
+}
 
 War::~War()
 {
@@ -51,6 +61,13 @@ Heap<Card>* War::startGame() {
 		std::cout << "Fin du round" << std::endl;
 		system("pause");
 	}
+	std::cout << "----------------------------------------------------" << std::endl;
+	std::cout << "-------------Deck de gain du joueur 1---------------" << std::endl;
+	std::cout << playersGainDecks[0] << std::endl;
+	std::cout << "-------------Deck de gain du joueur 2---------------" << std::endl;
+	std::cout << playersGainDecks[1] << std::endl;
+	std::cout << std::endl;
+
 	int winner = evaluateGame(playersGainDecks[0], playersGainDecks[1]);
 	std::cout << "-----------------------------------" << std::endl;
 	std::cout << "------------Resultats--------------" << std::endl;

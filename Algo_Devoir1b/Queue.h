@@ -6,7 +6,9 @@ template<typename T>
 class Queue
 {
 private: //Implmentation model
+	const static int DEFAULT_SIZE = 100;
 	list<T> array;
+	int max_size;
 public: // constructeurs et destructeurs:
 	Queue();
 	Queue(const Queue &);
@@ -28,6 +30,7 @@ public: // constructeurs et destructeurs:
 template<typename T> Queue<T>::Queue()
 {
 	this->array = list<T>();
+	this->size = DEFAULT_SIZE;
 }
 
 template<typename T>
@@ -74,8 +77,7 @@ template<typename T>
 template<typename T>
  bool Queue<T>::isFull() const
 {
-	//Not Implemented yet 
-	 //return this->array;
+	 return this->array.size() >= this->max_size;
 }
 
 template<typename T>
