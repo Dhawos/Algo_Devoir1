@@ -27,7 +27,6 @@ public:
 template<typename T>
 void Machine<T>::process()
 {
-	srand(unsigned(time(NULL)));
 	while (isRunning)
 	{
 		if (inQueue->isEmpty())
@@ -41,9 +40,10 @@ void Machine<T>::process()
 			short isMachineBroken = rand() % 4;
 			if (isMachineBroken == 0)
 			{
-				short repairMachineTime = (rand() % 6 + 5) /** 60*/;
-				std::cout << "Machine for " << typeid(T).name() << " is broken, time to repair: " << repairMachineTime << " seconds" << std::endl;
-				std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime));
+				short repairMachineTime = (rand() % 6 + 5);
+				std::cout << "Machine for " << typeid(T).name() << " is broken, time to repair: " << repairMachineTime << " minutes." << std::endl;
+				std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime * 60));
+				std::cout << "Machine for " << typeid(T).name() << " is repaired." << std::endl;
 			}
 
 			part.refine();
@@ -77,14 +77,14 @@ private:
 	const static short EMPTY_QUEUE_PROCESS_TIMEOUT = 1;
 	bool isRunning = true;
 public:
-	Machine(Queue<Head>* q0,Queue<Skirt>* q1,Queue<Axis>* q2) {
+	Machine(Queue<Head>* q0, Queue<Skirt>* q1, Queue<Axis>* q2) {
 		qHead = q0;
 		qSkirt = q1;
 		qAxis = q2;
 	};
 	~Machine() {};
 	Queue<Piston>& getOutQueue() { return this->outQueue; };
-	void process(){
+	void process() {
 		while (isRunning)
 		{
 			if (qHead->isEmpty() || qSkirt->isEmpty() || qAxis->isEmpty())
@@ -100,9 +100,10 @@ public:
 				short isMachineBroken = rand() % 4;
 				if (isMachineBroken == 0)
 				{
-					short repairMachineTime = (rand() % 6 + 5) * 60;
-					std::cout << "Machine for Piston is broken, time to repair: " << repairMachineTime << " seconds" << std::endl;
-					std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime));
+					short repairMachineTime = (rand() % 6 + 5);
+					std::cout << "Machine for Piston is broken, time to repair: " << repairMachineTime << " minutes." << std::endl;
+					std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime * 60));
+					std::cout << "Machine for Piston is repaired." << std::endl;
 				}
 
 				Piston piston;
