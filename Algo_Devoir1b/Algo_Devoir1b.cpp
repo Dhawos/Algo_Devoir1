@@ -14,10 +14,10 @@
 #include <thread>
 #include <typeinfo>
 
-#define SPAWN_PART_TIMEOUT 2000
-#define NB_PISTONS_TO_BUILD 10
-void spawnPart(int timeout, Part** newPart, bool* newPieceAvailable){
-	while (true) {
+#define SPAWN_PART_TIMEOUT 5000
+#define NB_PISTONS_TO_BUILD 100
+void spawnPart(int timeout, Part** newPart, bool* newPieceAvailable, bool* shouldBeRunning){
+	while (*shouldBeRunning) {
 		int typeofpiece = rand() % 3 + 1;
 		if (typeofpiece == 1) {
 			*newPart = new Head();
@@ -52,7 +52,8 @@ int main()
 
 	//This will simulate a part that we get from the dock
 	//Since we do not know what piece it will be, it's going to be a random part
-	std::thread spawningThread(spawnPart, SPAWN_PART_TIMEOUT,&part,&newPieceAvailable);
+	bool shouldBeRunning = true;
+	std::thread spawningThread(spawnPart, SPAWN_PART_TIMEOUT,&part,&newPieceAvailable,&shouldBeRunning);
 	
 	//start machine processes
 	MT.run();
@@ -84,6 +85,7 @@ int main()
 			free(part);
 		}
 	}
+	shouldBeRunning = false;
 	MT.stop();
 	MJ.stop();
 	MA.stop();
