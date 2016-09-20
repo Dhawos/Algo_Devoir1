@@ -15,6 +15,7 @@
 #include <typeinfo>
 
 #define SPAWN_PART_TIMEOUT 500
+#define NB_PISTONS_TO_BUILD 10
 void spawnPart(int timeout, Part** newPart, bool* newPieceAvailable){
 	while (true) {
 		int typeofpiece = rand() % 3 + 1;
@@ -47,8 +48,7 @@ int main()
 	Part* part = NULL;
 	bool newPieceAvailable = false; //This will be set to true each time we receive a new piece
 
-	//We start the timer
-	clock_t begin = clock();
+	auto start = std::chrono::system_clock::now();
 
 	//This will simulate a part that we get from the dock
 	//Since we do not know what piece it will be, it's going to be a random part
@@ -61,7 +61,7 @@ int main()
 	MP.run();
 
 	//Sort pieces arriving from the dock
-	while (MP.getOutQueue().size() <= 10) {
+	while (MP.getOutQueue().size() <= NB_PISTONS_TO_BUILD) {
 		if (newPieceAvailable) {
 			newPieceAvailable = false;
 			Head* pHead = dynamic_cast<Head*>(part);
@@ -84,9 +84,9 @@ int main()
 			free(part);
 		}
 	};
-	clock_t end = clock();
-	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-	std::cout << "Il a fallu " << elapsed_secs << " secondes pour obtenir les 100 pistons" << std::endl;
+	auto end = std::chrono::system_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+	std::cout << "Il a fallu " << elapsed.count() << " secondes pour obtenir les " << NB_PISTONS_TO_BUILD << " pistons" << std::endl;
 	system("pause");
     return 0;
 }
