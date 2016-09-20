@@ -13,6 +13,7 @@ private:
 	Queue<T> inQueue[1];
 	Queue<T> outQueue;
 	const static short EMPTY_QUEUE_PROCESS_TIMEOUT = 1;
+	bool isRunning = true;
 public:
 	Machine() {};
 	~Machine() {};
@@ -20,12 +21,13 @@ public:
 	Queue<T>& getOutQueue() { return this->outQueue; };
 	void givePart(T part) { this->inQueue[0].push(part); };
 	void run();
+	void stop();
 };
 
 template<typename T>
 void Machine<T>::process()
 {
-	while (true)
+	while (isRunning)
 	{
 		if (inQueue->isEmpty())
 		{
@@ -34,6 +36,15 @@ void Machine<T>::process()
 		else
 		{
 			T part = inQueue->pop();
+
+			short isMachineBroken = rand() % 4;
+			if (isMachineBroken == 0)
+			{
+				short repairMachineTime = (rand() % 6 + 5) * 60;
+				std::cout << "Machine for " << typeid(T).name() << "is broken, time to repair: " << repairMachineTime << " seconds" << std::endl;
+				std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime));
+			}
+
 			part.refine();
 			outQueue.push(part);
 		}
@@ -48,6 +59,12 @@ void Machine<T>::run()
 	t.detach();
 }
 
+template<typename T>
+void Machine<T>::stop()
+{
+	isRunning = false;
+}
+
 template<>
 class Machine<Piston>
 {
@@ -57,6 +74,7 @@ private:
 	Queue<Axis>* qAxis;
 	Queue<Piston> outQueue;
 	const static short EMPTY_QUEUE_PROCESS_TIMEOUT = 1;
+	bool isRunning = true;
 public:
 	Machine(Queue<Head>* q0,Queue<Skirt>* q1,Queue<Axis>* q2) {
 		qHead = q0;
@@ -66,7 +84,7 @@ public:
 	~Machine() {};
 	Queue<Piston>& getOutQueue() { return this->outQueue; };
 	void process(){
-		while (true)
+		while (isRunning)
 		{
 			if (qHead->isEmpty() || qSkirt->isEmpty() || qAxis->isEmpty())
 			{
@@ -77,6 +95,15 @@ public:
 				Head head = qHead->pop();
 				Skirt skirt = qSkirt->pop();
 				Axis axis = qAxis->pop();
+
+				short isMachineBroken = rand() % 4;
+				if (isMachineBroken == 0)
+				{
+					short repairMachineTime = (rand() % 6 + 5) * 60;
+					std::cout << "Machine for Piston is broken, time to repair: " << repairMachineTime << " seconds" << std::endl;
+					std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime));
+				}
+
 				Piston piston;
 				outQueue.push(piston);
 			}
@@ -85,6 +112,10 @@ public:
 	void run() {
 		std::thread t(&Machine<Piston>::process, this);
 		t.detach();
+	}
+	void stop()
+	{
+		isRunning = false;
 	}
 };
 
