@@ -11,12 +11,13 @@ class Machine
 {
 private:
 	Queue<T> inQueue[1];
-	Queue<T> outQueue[1];
-	const short EMPTY_QUEUE_PROCESS_TIMEOUT = 1;
+	Queue<T> outQueue;
+	const static short EMPTY_QUEUE_PROCESS_TIMEOUT = 1;
 public:
 	Machine() {};
 	~Machine() {};
-	void process(); //TODO
+	void process();
+	Queue<T>& getOutQueue() { return this->outQueue; };
 	void givePart(T part) { this->inQueue[0].push(part); };
 	void run();
 };
@@ -34,7 +35,7 @@ void Machine<T>::process()
 		{
 			T part = inQueue->pop();
 			part.refine();
-			outQueue->push(part);
+			outQueue.push(part);
 		}
 	}
 
@@ -51,16 +52,42 @@ template<>
 class Machine<Piston>
 {
 private:
-	Queue<Part> inQueue[3];
-	Queue<Piston> outQueue[3];
+	Queue<Head>* qHead;
+	Queue<Skirt>* qSkirt;
+	Queue<Axis>* qAxis;
+	Queue<Piston> outQueue;
+	const static short EMPTY_QUEUE_PROCESS_TIMEOUT = 1;
 public:
-	Machine() {};
+	Machine(Queue<Head>* q0,Queue<Skirt>* q1,Queue<Axis>* q2) {
+		qHead = q0;
+		qSkirt = q1;
+		qAxis = q2;
+	};
 	~Machine() {};
-	void givePart(Head part) { this->inQueue[0].push(part); };
-	void givePart(Skirt part) { this->inQueue[1].push(part); };
-	void givePart(Axis part) { this->inQueue[2].push(part); };
-	void process() {}; //TODO
+	Queue<Piston>& getOutQueue() { return this->outQueue; };
+	void process(){
+		while (true)
+		{
+			if (qHead->isEmpty() || qSkirt->isEmpty() || qAxis->isEmpty())
+			{
+				std::this_thread::sleep_for(std::chrono::seconds(EMPTY_QUEUE_PROCESS_TIMEOUT));
+			}
+			else
+			{
+				Head head = qHead->pop();
+				Skirt skirt = qSkirt->pop();
+				Axis axis = qAxis->pop();
+				Piston piston;
+				outQueue.push(piston);
+			}
+		}
+	};
+	void run() {
+		std::thread t(&Machine<Piston>::process, this);
+		t.detach();
+	}
 };
+
 
 
 

@@ -6,7 +6,7 @@ template<typename T>
 class Queue
 {
 private: //Implmentation model
-	const static int DEFAULT_SIZE = 100;
+	const static int DEFAULT_SIZE = 200;
 	list<T> array;
 	int max_size;
 public: // constructeurs et destructeurs:

@@ -14,7 +14,7 @@
 #include <thread>
 #include <typeinfo>
 
-#define SPAWN_PART_TIMEOUT 1
+#define SPAWN_PART_TIMEOUT 500
 void spawnPart(int timeout, Part** newPart, bool* newPieceAvailable){
 	while (true) {
 		int typeofpiece = rand() % 3 + 1;
@@ -27,9 +27,9 @@ void spawnPart(int timeout, Part** newPart, bool* newPieceAvailable){
 		else {
 			*newPart = new Axis();
 		}
-		std::cout << "A new piece has been spawned" << std::endl;
+		std::cout << "A new piece has been spawned : " << **newPart << std::endl;
 		*newPieceAvailable = true;
-		std::this_thread::sleep_for(std::chrono::seconds(timeout));
+		std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 	}
 	
 }
@@ -41,24 +41,29 @@ int main()
 	Machine<Head> MT;
 	Machine<Skirt> MJ;
 	Machine<Axis> MA;
-	Machine<Piston> MP;
+	Machine<Piston> MP = Machine<Piston>(&MT.getOutQueue(),&MJ.getOutQueue(),&MA.getOutQueue());
 
 	//Initializing slot for new parts arriving
 	Part* part = NULL;
-	bool* newPieceAvailable = new bool(false); //This will be set to true each time we receive a new piece
+	bool newPieceAvailable = false; //This will be set to true each time we receive a new piece
+
+	//We start the timer
+	clock_t begin = clock();
+
 	//This will simulate a part that we get from the dock
 	//Since we do not know what piece it will be, it's going to be a random part
-	std::thread spawningThread(spawnPart, SPAWN_PART_TIMEOUT,&part,newPieceAvailable);
+	std::thread spawningThread(spawnPart, SPAWN_PART_TIMEOUT,&part,&newPieceAvailable);
 	
 	//start machine processes
 	MT.run();
-	//MJ.run();
-	//MA.run();
+	MJ.run();
+	MA.run();
+	MP.run();
 
 	//Sort pieces arriving from the dock
-	while (true) {
-		if (*newPieceAvailable) {
-			*newPieceAvailable = false;
+	while (MP.getOutQueue().size() <= 10) {
+		if (newPieceAvailable) {
+			newPieceAvailable = false;
 			Head* pHead = dynamic_cast<Head*>(part);
 			if (pHead == NULL) { //The part is not a Head
 				Skirt* pSkirt = dynamic_cast<Skirt*>(part);
@@ -79,11 +84,10 @@ int main()
 			free(part);
 		}
 	};
-
-	//Les envoyer dans la bonne machine
-	//Des qu'une pièce de chaque est prête envoyer sur la machine principal
-	//Récupérer l'assemblage et incrémenter un compteur
-	free(newPieceAvailable);
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::cout << "Il a fallu " << elapsed_secs << " secondes pour obtenir les 100 pistons" << std::endl;
+	system("pause");
     return 0;
 }
 
