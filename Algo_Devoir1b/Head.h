@@ -1,5 +1,6 @@
 #pragma once
 #include "Part.h"
+#include <thread>
 class Head :public Part
 {
 private:

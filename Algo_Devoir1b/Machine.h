@@ -1,6 +1,9 @@
 #pragma once
 #include "Queue.h"
 #include "Piston.h"
+#include "Head.h"
+#include "Axis.h"
+#include "Skirt.h"
 #include <thread>
 
 template<typename T>
@@ -14,6 +17,7 @@ public:
 	Machine() {};
 	~Machine() {};
 	void process(); //TODO
+	void givePart(T part){ this->inQueue[0].push(part); };
 };
 
 template<typename T>
@@ -36,11 +40,14 @@ template<>
 class Machine<Piston>
 {
 private:
-	Queue<Piston> inQueue[3];
+	Queue<Part> inQueue[3];
 	Queue<Piston> outQueue[3];
 public:
 	Machine() {};
 	~Machine() {};
+	void givePart(Head part) { this->inQueue[0].push(part); };
+	void givePart(Skirt part) { this->inQueue[1].push(part); };
+	void givePart(Axis part) { this->inQueue[2].push(part); };
 	void process() {}; //TODO
 };
 

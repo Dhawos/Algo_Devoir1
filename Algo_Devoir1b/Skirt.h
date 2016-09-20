@@ -1,5 +1,7 @@
 #pragma once
 #include "Part.h"
+#include <thread>
+
 class Skirt :
 	public Part
 {
