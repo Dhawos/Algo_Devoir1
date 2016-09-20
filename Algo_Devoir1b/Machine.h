@@ -27,6 +27,7 @@ public:
 template<typename T>
 void Machine<T>::process()
 {
+	srand(unsigned(time(NULL)));
 	while (isRunning)
 	{
 		if (inQueue->isEmpty())
@@ -40,8 +41,8 @@ void Machine<T>::process()
 			short isMachineBroken = rand() % 4;
 			if (isMachineBroken == 0)
 			{
-				short repairMachineTime = (rand() % 6 + 5) * 60;
-				std::cout << "Machine for " << typeid(T).name() << "is broken, time to repair: " << repairMachineTime << " seconds" << std::endl;
+				short repairMachineTime = (rand() % 6 + 5) /** 60*/;
+				std::cout << "Machine for " << typeid(T).name() << " is broken, time to repair: " << repairMachineTime << " seconds" << std::endl;
 				std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime));
 			}
 

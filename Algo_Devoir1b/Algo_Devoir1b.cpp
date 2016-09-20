@@ -14,7 +14,7 @@
 #include <thread>
 #include <typeinfo>
 
-#define SPAWN_PART_TIMEOUT 500
+#define SPAWN_PART_TIMEOUT 2000
 #define NB_PISTONS_TO_BUILD 10
 void spawnPart(int timeout, Part** newPart, bool* newPieceAvailable){
 	while (true) {
