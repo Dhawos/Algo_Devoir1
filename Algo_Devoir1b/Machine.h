@@ -17,23 +17,33 @@ public:
 	Machine() {};
 	~Machine() {};
 	void process(); //TODO
-	void givePart(T part){ this->inQueue[0].push(part); };
+	void givePart(T part) { this->inQueue[0].push(part); };
+	void run();
 };
 
 template<typename T>
 void Machine<T>::process()
 {
-	if (inQueue->isEmpty())
+	while (true)
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(EMPTY_QUEUE_PROCESS_TIMEOUT));
-	}
-	else
-	{
-		Part* part = inQueue->pop();
-		part->refine();
-		outQueue->push(part);
+		if (inQueue->isEmpty())
+		{
+			std::this_thread::sleep_for(std::chrono::seconds(EMPTY_QUEUE_PROCESS_TIMEOUT));
+		}
+		else
+		{
+			T part = inQueue->pop();
+			part.refine();
+			outQueue->push(part);
+		}
 	}
 
+}
+
+template<typename T>
+void Machine<T>::run()
+{
+	std::thread t(&Machine<T>::process, this);
 }
 
 template<>

@@ -50,6 +50,11 @@ int main()
 	//Since we do not know what piece it will be, it's going to be a random part
 	std::thread spawningThread(spawnPart, SPAWN_PART_TIMEOUT,&part,newPieceAvailable);
 	
+	//start machine processes
+	MT.run();
+	MJ.run();
+	MA.run();
+
 	//Sort pieces arriving from the dock
 	while (true) {
 		if (*newPieceAvailable) {

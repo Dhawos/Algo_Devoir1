@@ -37,7 +37,7 @@ template<typename T>
  Queue<T>::Queue(const Queue & other)
 {
 	 this->array = other.array;
-	 this->size = other.size;
+	 this->max_size = other.max_size;
 }
 
 template<typename T>
@@ -63,7 +63,7 @@ template<typename T>
 	}
 	T element = this->array.front();
 	this->array.pop_front();
-	return this->array.;
+	return element;
 }
 
 template<typename T>
