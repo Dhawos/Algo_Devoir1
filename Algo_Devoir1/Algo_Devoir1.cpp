@@ -10,15 +10,15 @@ using namespace std;
 
 int main()
 {
-	int playerHeapSize;
+	int playerStackSize;
 	string input;
 	bool correctInput = false;
 	while (!correctInput) {
 		std::cout << "Combien de cartes faut-il generer par joueur ? (max 50)" << std::endl;
 		std::getline(std::cin, input);
 		try {
-			playerHeapSize = std::stoi(input);
-			if (playerHeapSize > 1 && playerHeapSize <= 50) {
+			playerStackSize = std::stoi(input);
+			if (playerStackSize > 1 && playerStackSize <= 50) {
 				correctInput = true;
 			}
 			else {
@@ -30,7 +30,7 @@ int main()
 		}
 	}
 	srand(unsigned(time(NULL))); //Needed in order for cards to be random
-	Heap<Card> deck = Heap<Card>(MAX_SIZE);
+	Stack<Card> deck = Stack<Card>(MAX_SIZE);
 	for (int i = 0; i < MAX_SIZE ; i++) {
 		Card newCard = Card();
 		deck.push(newCard);
@@ -38,10 +38,10 @@ int main()
 	std::cout << "----------------Deck de depart----------------" << std::endl;
 	std::cout << deck << std::endl;
 	bool wantsToPlay = true;
-	Heap<Card>* gainDecks = new Heap<Card>[2];
+	Stack<Card>* gainDecks = new Stack<Card>[2];
 	while (wantsToPlay){
 		if (gainDecks[0].size() == 0 && gainDecks[1].size() == 0) {
-			War game = War(playerHeapSize, deck,gainDecks);
+			War game = War(playerStackSize, deck,gainDecks);
 			gainDecks = game.startGame();
 		}
 		else {

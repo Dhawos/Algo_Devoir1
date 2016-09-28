@@ -42,7 +42,7 @@ void Machine<T>::process()
 			{
 				short repairMachineTime = (rand() % 6 + 5);
 				std::cout << "Machine for " << typeid(T).name() << " is broken, time to repair: " << repairMachineTime << " minutes." << std::endl;
-				std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime * 60*;
+				std::this_thread::sleep_for(std::chrono::seconds(repairMachineTime * 60));
 				std::cout << "Machine for " << typeid(T).name() << " is repaired." << std::endl;
 			}
 

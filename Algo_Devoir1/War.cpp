@@ -2,20 +2,20 @@
 #include "War.h"
 #include <iostream>
 
-War::War(int nbCardsPerPlayer,Heap<Card> deck, Heap<Card> *playersGainDecks)
+War::War(int nbCardsPerPlayer,Stack<Card> deck, Stack<Card> *playersGainDecks)
 {
 	this->nbCardsPerPlayer = nbCardsPerPlayer;
 	this->deck = deck;
-	this->playersDecks[0] = Heap<Card>(this->nbCardsPerPlayer);
-	this->playersDecks[1] = Heap<Card>(this->nbCardsPerPlayer);
+	this->playersDecks[0] = Stack<Card>(this->nbCardsPerPlayer);
+	this->playersDecks[1] = Stack<Card>(this->nbCardsPerPlayer);
 	this->playersGainDecks = playersGainDecks;
 	this->distributeCards();
 }
 
-War::War(Heap<Card> *playersGainDecks)
+War::War(Stack<Card> *playersGainDecks)
 {
-	Heap<Card> deckP1 = playersGainDecks[0];
-	Heap<Card> deckP2 = playersGainDecks[1];
+	Stack<Card> deckP1 = playersGainDecks[0];
+	Stack<Card> deckP2 = playersGainDecks[1];
 	if (deckP1.size() <= deckP2.size()) {
 		this->nbCardsPerPlayer = deckP1.size();
 	}
@@ -25,14 +25,14 @@ War::War(Heap<Card> *playersGainDecks)
 	this->playersDecks[0] = deckP1;
 	this->playersDecks[1] = deckP2;
 	delete[] this->playersGainDecks;
-	this->playersGainDecks = new Heap<Card>[2];
+	this->playersGainDecks = new Stack<Card>[2];
 }
 
 War::~War()
 {
 }
 
-Heap<Card>* War::startGame() {
+Stack<Card>* War::startGame() {
 	std::cout << "-------------Deck du joueur 1---------------" << std::endl;
 	std::cout << playersDecks[0] << std::endl;
 	std::cout << "-------------Deck du joueur 2---------------"  << std::endl;
@@ -109,16 +109,16 @@ char War::evaluateRound(Card card0,Card card1) {
 	}
 }
 
-char War::evaluateGame(Heap<Card> heap0, Heap<Card> heap1) {
-	Heap<Card> copyHeap0 = heap0;
-	Heap<Card> copyHeap1 = heap1;
+char War::evaluateGame(Stack<Card> Stack0, Stack<Card> Stack1) {
+	Stack<Card> copyStack0 = Stack0;
+	Stack<Card> copyStack1 = Stack1;
 	int sum0 = 0;
 	int sum1 = 0;
-	while (!copyHeap0.isEmpty()) {
-		sum0 += copyHeap0.pop().getScore();
+	while (!copyStack0.isEmpty()) {
+		sum0 += copyStack0.pop().getScore();
 	}
-	while (!copyHeap1.isEmpty()) {
-		sum1 += copyHeap1.pop().getScore();
+	while (!copyStack1.isEmpty()) {
+		sum1 += copyStack1.pop().getScore();
 	}
 	finalScores[0] = sum0;
 	finalScores[1] = sum1;
